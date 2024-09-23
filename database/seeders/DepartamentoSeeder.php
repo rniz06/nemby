@@ -22,6 +22,7 @@ class DepartamentoSeeder extends Seeder
             'COMUNICACIONES',
             'COMISIONES VECINALES',
             'CULTURA',
+            'DEPORTES',
             'DESARROLLO HUMANO',
             'DESARROLLO SOCIAL',
             'DISCAPACIDAD',
