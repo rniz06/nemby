@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('expedientes', function (Blueprint $table) {
             $table->id();
             $table->string('asunto')->nullable();
-            $table->string('n_mesa_entrada')->nullable();
+            $table->string('n_mesa_entrada')->unique()->nullable();
             $table->unsignedBigInteger('estado_id')->nullable();
             $table->unsignedBigInteger('agregado_por')->nullable();
             $table->unsignedBigInteger('ciudadano_id')->nullable();

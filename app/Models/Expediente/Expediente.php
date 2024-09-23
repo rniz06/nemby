@@ -25,7 +25,7 @@ class Expediente extends Model
 
     // Relacion uno a muchos con la tabla "users" a travez del campo "agregado_por"
     // un expediente debe ser agregado por un usuario
-    public function agregado_por()
+    public function agregadoPor()
     {
         return $this->belongsTo(User::class, 'agregado_por');
     }

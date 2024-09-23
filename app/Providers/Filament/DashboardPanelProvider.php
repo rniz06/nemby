@@ -2,6 +2,7 @@
 
 namespace App\Providers\Filament;
 
+use Filament\Support\Enums\MaxWidth;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
@@ -54,6 +55,7 @@ class DashboardPanelProvider extends PanelProvider
             ->authMiddleware([
                 Authenticate::class,
             ])
+            ->maxContentWidth(MaxWidth::ScreenTwoExtraLarge)
             ->plugins([
                 \BezhanSalleh\FilamentShield\FilamentShieldPlugin::make()
             ]);
