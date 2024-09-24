@@ -38,9 +38,59 @@ class ExpedienteResource extends Resource
                     // Campo para añadir el asunto del expediente
                     TextInput::make('asunto')
                         ->label('Asunto:'),
-                    // Campo para el numero de mesa de entrada
+                    // Campo para el numero de mesa de entrada                    
                     TextInput::make('n_mesa_entrada')
-                        ->label('N° Mesa de entrada:'),
+                        // Hace que el campo sea obligatorio en el formulario.
+                        ->required()
+
+                        // Función que se ejecuta cuando el componente ha sido "hidratado" con el estado actual (es decir, cuando los datos han sido cargados o establecidos).
+                        ->afterStateHydrated(function (TextInput $component, $state) {
+                            // Si el estado del campo está vacío, se ejecuta la siguiente lógica.
+                            if (empty($state)) {
+                                // Obtiene el año actual en formato de dos dígitos (ejemplo: '24' para el año 2024).
+                                $year = date('y');
+
+                                // Busca el último expediente registrado cuyo número de mesa de entrada comience con el año actual (formato '24-').
+                                $lastExpediente = Expediente::where('n_mesa_entrada', 'like', $year . '-%')
+                                    // Ordena los expedientes en orden descendente basándose en la parte numérica después del año (por ejemplo, '00001').
+                                    ->orderByRaw('CAST(SUBSTRING(n_mesa_entrada, 4) AS UNSIGNED) DESC')
+                                    // Obtiene el primer expediente de la lista, es decir, el más reciente.
+                                    ->first();
+
+                                // Si se encontró un expediente anterior...
+                                if ($lastExpediente) {
+                                    // Extrae la parte numérica del número de mesa de entrada y la convierte a un entero.
+                                    $lastNumber = intval(substr($lastExpediente->n_mesa_entrada, 3));
+                                    // Incrementa el número para generar el siguiente número de mesa de entrada.
+                                    $newNumber = $lastNumber + 1;
+                                } else {
+                                    // Si no hay expedientes anteriores, establece el número como 1 (primer expediente del año).
+                                    $newNumber = 1;
+                                }
+
+                                // Formatea el nuevo número de mesa de entrada en el formato '24-00001', añadiendo ceros a la izquierda si es necesario.
+                                $newCode = $year . '-' . str_pad($newNumber, 5, '0', STR_PAD_LEFT);
+
+                                // Establece el estado del componente (es decir, el valor del campo) con el nuevo número de mesa de entrada generado.
+                                $component->state($newCode);
+                            }
+                        })
+
+                        // Indica que el valor del campo debe ser único, ignorando el registro actual si está siendo editado.
+                        ->unique(ignoreRecord: true)
+
+                        // Limita la longitud del campo a 8 caracteres.
+                        ->length(8)
+
+                        // Etiqueta visible del campo, que aparece en el formulario como "Número de Mesa de Entrada".
+                        ->label('Número de Mesa de Entrada')
+
+                        // Deshabilita el campo para que no sea editable directamente por el usuario.
+                        ->disabled()
+
+                        // Permite que el valor del campo se envíe cuando se envía el formulario, aunque esté deshabilitado.
+                        ->dehydrated(true),
+
                     // Campo para seleccionar el estado del expediente
                     Select::make('estado_id')
                         ->label('Estado:')
