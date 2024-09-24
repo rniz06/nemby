@@ -36,7 +36,7 @@ class CiudadanoResource extends Resource
                     Forms\Components\TextInput::make('nombre')
                         ->label('Nombre:')
                         ->required()
-                        ->reactive()
+                        ->live(onBlur: true)
                         ->afterStateUpdated(function (Forms\Get $get, Forms\Set $set) {
                             $nombre = $get('nombre');
                             $apellido = $get('apellido');
@@ -48,7 +48,7 @@ class CiudadanoResource extends Resource
                     Forms\Components\TextInput::make('apellido')
                         ->label('Apellido:')
                         ->maxLength(255)
-                        ->reactive()
+                        ->live(onBlur: true)
                         ->afterStateUpdated(function (Forms\Get $get, Forms\Set $set) {
                             $nombre = $get('nombre');
                             $apellido = $get('apellido');
