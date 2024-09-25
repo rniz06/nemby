@@ -185,28 +185,31 @@ class ExpedienteResource extends Resource
             ->schema([
 
                 Infolists\Components\Grid::make(3)
+                ->schema([
+                    Infolists\Components\Section::make('')
                     ->schema([
-                        Infolists\Components\Section::make('Asunto:')                                                
+                        Infolists\Components\RepeatableEntry::make('comentarios')
                         ->schema([
-                            Infolists\Components\Section::make()
-                            ->description('Comentarios:')
+                            Infolists\Components\Section::make(fn ($record) => $record->usuario->name . ' - ' . $record->created_at)
                             ->schema([
-                                Infolists\Components\TextEntry::make('comentarios.comentario')
-                            ])                                                    
-                        ])
-                        ->columnSpan(2),
+                                Infolists\Components\TextEntry::make('comentario')
+                                ->label('')
+                            ])
+                        ])->contained(false)
+                    ])
+                    ->columnSpan(2),
 
-                        Infolists\Components\Section::make([
-                            Infolists\Components\TextEntry::make('asunto')
-                                ->label('Asunto:'),
-                            Infolists\Components\TextEntry::make('n_mesa_entrada')
-                                ->label('N° Mesa de entrada:'),
-                            Infolists\Components\TextEntry::make('ciudadano.nombre_completo')
-                                ->label('Responsable:'),
-                            Infolists\Components\TextEntry::make('departamento.departamento')
-                                ->label('Dirección Actual:'),
-                        ])->columnSpan(1),
-                    ])->columnSpanFull()
+                    Infolists\Components\Section::make([
+                        Infolists\Components\TextEntry::make('asunto')
+                            ->label('Asunto:'),
+                        Infolists\Components\TextEntry::make('n_mesa_entrada')
+                            ->label('N° Mesa de entrada:'),
+                        Infolists\Components\TextEntry::make('ciudadano.nombre_completo')
+                            ->label('Responsable:'),
+                        Infolists\Components\TextEntry::make('departamento.departamento')
+                            ->label('Dirección Actual:'),
+                    ])->columnSpan(1),
+                ])->columnSpanFull()
             ]);
     }
 }
