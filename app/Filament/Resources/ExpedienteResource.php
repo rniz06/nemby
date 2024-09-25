@@ -21,6 +21,8 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Section;
 use Illuminate\Support\Facades\Auth;
+use Filament\Infolists;
+use Filament\Infolists\Infolist;
 
 class ExpedienteResource extends Resource
 {
@@ -175,5 +177,36 @@ class ExpedienteResource extends Resource
             'view' => Pages\ViewExpediente::route('/{record}'),
             'edit' => Pages\EditExpediente::route('/{record}/edit'),
         ];
+    }
+
+    public static function infolist(Infolist $infolist): Infolist
+    {
+        return $infolist
+            ->schema([
+
+                Infolists\Components\Grid::make(3)
+                    ->schema([
+                        Infolists\Components\Section::make('Asunto:')                                                
+                        ->schema([
+                            Infolists\Components\Section::make()
+                            ->description('Comentarios:')
+                            ->schema([
+                                Infolists\Components\TextEntry::make('comentarios.comentario')
+                            ])                                                    
+                        ])
+                        ->columnSpan(2),
+
+                        Infolists\Components\Section::make([
+                            Infolists\Components\TextEntry::make('asunto')
+                                ->label('Asunto:'),
+                            Infolists\Components\TextEntry::make('n_mesa_entrada')
+                                ->label('N° Mesa de entrada:'),
+                            Infolists\Components\TextEntry::make('ciudadano.nombre_completo')
+                                ->label('Responsable:'),
+                            Infolists\Components\TextEntry::make('departamento.departamento')
+                                ->label('Dirección Actual:'),
+                        ])->columnSpan(1),
+                    ])->columnSpanFull()
+            ]);
     }
 }
