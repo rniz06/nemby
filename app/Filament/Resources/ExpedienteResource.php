@@ -186,16 +186,13 @@ class ExpedienteResource extends Resource
 
                 Infolists\Components\Grid::make(3)
                 ->schema([
-                    Infolists\Components\Section::make('')
+                    Infolists\Components\RepeatableEntry::make('comentarios')
+                    ->label('')
                     ->schema([
-                        Infolists\Components\RepeatableEntry::make('comentarios')
-                        ->schema([
-                            Infolists\Components\Section::make(fn ($record) => $record->usuario->name . ' - ' . $record->created_at)
-                            ->schema([
-                                Infolists\Components\TextEntry::make('comentario')
-                                ->label('')
-                            ])
-                        ])->contained(false)
+                        Infolists\Components\TextEntry::make('usuario.name')->label(''),
+                        Infolists\Components\TextEntry::make('created_at')->label('')->dateTime(),
+                        Infolists\Components\TextEntry::make('comentario')->label('')
+                            ->columnSpan(2),
                     ])
                     ->columnSpan(2),
 
