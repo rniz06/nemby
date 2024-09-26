@@ -178,35 +178,4 @@ class ExpedienteResource extends Resource
             'edit' => Pages\EditExpediente::route('/{record}/edit'),
         ];
     }
-
-    public static function infolist(Infolist $infolist): Infolist
-    {
-        return $infolist
-            ->schema([
-
-                Infolists\Components\Grid::make(3)
-                ->schema([
-                    Infolists\Components\RepeatableEntry::make('comentarios')
-                    ->label('')
-                    ->schema([
-                        Infolists\Components\TextEntry::make('usuario.name')->label(''),
-                        Infolists\Components\TextEntry::make('created_at')->label('')->dateTime(),
-                        Infolists\Components\TextEntry::make('comentario')->label('')
-                            ->columnSpan(2),
-                    ])
-                    ->columnSpan(2),
-
-                    Infolists\Components\Section::make([
-                        Infolists\Components\TextEntry::make('asunto')
-                            ->label('Asunto:'),
-                        Infolists\Components\TextEntry::make('n_mesa_entrada')
-                            ->label('N° Mesa de entrada:'),
-                        Infolists\Components\TextEntry::make('ciudadano.nombre_completo')
-                            ->label('Responsable:'),
-                        Infolists\Components\TextEntry::make('departamento.departamento')
-                            ->label('Dirección Actual:'),
-                    ])->columnSpan(1),
-                ])->columnSpanFull()
-            ]);
-    }
 }
