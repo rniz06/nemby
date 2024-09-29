@@ -3,13 +3,23 @@
 namespace App\Filament\Resources\ExpedienteResource\Pages;
 
 use App\Filament\Resources\ExpedienteResource;
-use Filament\Actions;
+use App\Models\Departamento;
+use App\Models\Expediente\Archivo;
+use App\Models\Expediente\Comentario;
+use App\Models\Expediente\Expediente;
 use Filament\Resources\Pages\ViewRecord;
 use Filament\Infolists\Infolist;
 use Filament\Infolists\Components\Grid;
 use Filament\Infolists\Components\Section;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Components\RepeatableEntry;
+use Filament\Actions;
+use Filament\Forms\Components\Select;
+use Filament\Actions\Action;
+use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\FileUpload;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class ViewExpediente extends ViewRecord
 {
@@ -19,6 +29,81 @@ class ViewExpediente extends ViewRecord
     {
         return [
             // Actions\EditAction::make(),
+
+            // Logica que crea un boton para abri un modal y realizar un comentario
+            Action::make('Subir Archivo')
+                ->color('gray')
+                ->form([
+                    FileUpload::make('archivo')
+                        ->label('')
+                        ->directory('expedientes/' . date('Y') . '/' . date('m') . '/' . date('d'))
+                        ->storeFileNamesIn('nombre_archivo_original')
+                        ->previewable(true)
+                        ->maxSize(20480)
+                        ->required(),
+                    Textarea::make('descripcion')
+                        ->label('Descripción: (*Opcional)')
+                        ->required()
+                ])
+                ->action(function (array $data, Expediente $record) {
+                    $archivo = new Archivo();
+
+                    // preparar los datos a inserta en la tabla
+                    $nombreOriginal = $data['nombre_archivo_original'];
+                    $nombre_generado = basename($data['archivo']);
+                    $ruta = $data['archivo'];
+                    $tipo = Storage::disk('public')->mimeType($data['archivo']);
+                    $tamano = Storage::disk('public')->size($data['archivo']);
+                    $descripcion = $data['descripcion'];
+                    //
+                    $archivo->nombre_original = $nombreOriginal;
+                    $archivo->nombre_generado = $nombre_generado;
+                    $archivo->ruta = $ruta;
+                    $archivo->tipo = $tipo;
+                    $archivo->tamano = $tamano;
+                    $archivo->descripcion = $descripcion;
+                    $archivo->usuario_id = Auth::id();
+                    $archivo->expediente_id = $record->id;
+
+                    $archivo->save();
+                }),
+
+            // Logica que crea un boton para abri un modal y realizar un comentario
+            Action::make('comentar')
+                ->color('gray')
+                ->form([
+                    Textarea::make('comentario')
+                        ->label('')
+                        ->required()
+                ])
+                ->action(function (array $data, Expediente $record) {
+                    $comentario = new Comentario();
+
+                    $comentario->comentario = $data['comentario'];
+                    $comentario->usuario_id = Auth::id();
+                    $comentario->expediente_id = $record->id;
+
+                    $comentario->save();
+                }),
+
+
+            // Logica que crea un boton para derivar el expediente
+            Action::make('derivar')
+                ->color('gray')
+                ->fillForm(fn(Expediente $record): array => [
+                    'departamento_id' => $record->departamento_id,
+                ])
+                ->form([
+                    Select::make('departamento_id')
+                        ->label('Seleccionar Dirección')
+                        ->options(Departamento::query()->pluck('departamento', 'id'))
+                        ->required(),
+                ])
+                ->action(function (array $data, Expediente $record): void {
+                    $record->departamento_id = $data['departamento_id'];
+                    $record->save();
+                }),
+
         ];
     }
 

@@ -10,9 +10,9 @@ class Archivo extends Model
 {
     use HasFactory;
 
-    protected $table = "expediente_comentarios";
+    protected $table = "expediente_archivos";
 
-    protected $fillable = ['nombre_original', 'nombre_a_mostrar', 'ruta', 'tamano', 'tipo', 'descripcion', 'usuario_id', 'expediente_id',];
+    protected $fillable = ['nombre_original', 'nombre_generado', 'ruta', 'tamano', 'tipo', 'descripcion', 'usuario_id', 'expediente_id',];
 
     // Relacion uno a muchos con la tabla "users" a travez del campo "usuario_id"
     // Un archivo debe ser agregado por un usuario

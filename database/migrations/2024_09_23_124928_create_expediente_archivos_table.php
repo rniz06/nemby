@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('expediente_archivos', function (Blueprint $table) {
             $table->id();
             $table->string('nombre_original')->nullable();
-            $table->string('nombre_a_mostrar')->nullable();
+            $table->string('nombre_generado')->nullable();
             $table->string('ruta')->nullable();
             $table->string('tamano')->nullable();
             $table->string('tipo')->nullable();
