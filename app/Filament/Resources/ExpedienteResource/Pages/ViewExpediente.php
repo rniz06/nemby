@@ -20,6 +20,7 @@ use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\FileUpload;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Filament\Infolists\Components\Actions\Action as ActionInfolist;
 
 class ViewExpediente extends ViewRecord
 {
@@ -126,7 +127,8 @@ class ViewExpediente extends ViewRecord
                                 TextEntry::make('asunto')
                                     ->label('Asunto:'),
                                 TextEntry::make('n_mesa_entrada')
-                                ->badge()
+                                    ->badge()
+                                    ->color('success')
                                     ->label('N° Mesa de entrada:'),
                                 TextEntry::make('ciudadano.nombre_completo')
                                     ->label('Responsable:'),
@@ -134,7 +136,9 @@ class ViewExpediente extends ViewRecord
                                     ->label('Dirección Actual:'),
                                 RepeatableEntry::make('archivos')
                                     ->schema([
-                                        TextEntry::make('nombre_original')->label(''),
+                                        TextEntry::make('nombre_original')->label('')
+                                        ->url(fn ($record) => route('expediente.descargar.archivo', $record->id))
+                                        ->openUrlInNewTab()                                        
                                     ])->contained(false),
                             ])->columnSpan(1)
                     ])->columnSpanFull()
