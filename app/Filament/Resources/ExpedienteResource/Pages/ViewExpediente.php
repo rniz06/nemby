@@ -43,7 +43,6 @@ class ViewExpediente extends ViewRecord
                         ->required(),
                     Textarea::make('descripcion')
                         ->label('Descripción: (*Opcional)')
-                        ->required()
                 ])
                 ->action(function (array $data, Expediente $record) {
                     $archivo = new Archivo();
@@ -127,11 +126,16 @@ class ViewExpediente extends ViewRecord
                                 TextEntry::make('asunto')
                                     ->label('Asunto:'),
                                 TextEntry::make('n_mesa_entrada')
+                                ->badge()
                                     ->label('N° Mesa de entrada:'),
                                 TextEntry::make('ciudadano.nombre_completo')
                                     ->label('Responsable:'),
                                 TextEntry::make('departamento.departamento')
                                     ->label('Dirección Actual:'),
+                                RepeatableEntry::make('archivos')
+                                    ->schema([
+                                        TextEntry::make('nombre_original')->label(''),
+                                    ])->contained(false),
                             ])->columnSpan(1)
                     ])->columnSpanFull()
             ]);
