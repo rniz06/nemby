@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Expediente\Archivo;
+use App\Models\Expediente\Expediente;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use function Spatie\LaravelPdf\Support\pdf;
 
 class ExpedienteController extends Controller
 {
@@ -16,4 +18,14 @@ class ExpedienteController extends Controller
         
         return response()->download($content, $archivo->nombre_original);
     }
+
+    //generarPDF
+    public function generarPDF($record)
+    {
+        $expediente = Expediente::findOrFail($record);
+        return pdf()
+            ->view('pdf.expediente', compact('expediente'))
+            ->name('Expediente N°' . $expediente->n_mesa_entrada . '.pdf');
+    }
+
 }

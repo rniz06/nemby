@@ -23,6 +23,7 @@ use Filament\Forms\Components\Section;
 use Illuminate\Support\Facades\Auth;
 use Filament\Infolists;
 use Filament\Infolists\Infolist;
+use Filament\Tables\Actions\Action;
 
 class ExpedienteResource extends Resource
 {
@@ -154,6 +155,11 @@ class ExpedienteResource extends Resource
             ->actions([
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
+                Action::make('pdf')
+                    ->label('Exportar')
+                    ->icon('heroicon-c-arrow-down-tray')
+                    ->url(fn(Expediente $record): string => route('expediente.generar.pdf', $record))
+                    ->openUrlInNewTab(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
