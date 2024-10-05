@@ -137,7 +137,9 @@ class ViewExpediente extends ViewRecord
                                 RepeatableEntry::make('archivos')
                                     ->schema([
                                         TextEntry::make('nombre_original')->label('')
+                                        
                                         ->url(fn ($record) => route('expediente.descargar.archivo', $record->id))
+                                        ->badge()
                                         ->openUrlInNewTab()                                        
                                     ])->contained(false),
                             ])->columnSpan(1)
