@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Spatie\LaravelPdf\Enums\Format;
 use App\Models\Expediente\Archivo;
 use App\Models\Expediente\Expediente;
 use Illuminate\Http\Request;
@@ -23,8 +24,14 @@ class ExpedienteController extends Controller
     public function generarPDF($record)
     {
         $expediente = Expediente::findOrFail($record);
+        $responsable = $expediente->ciudadano()->first();
+        $comentarios = $expediente->comentarios()->orderBy('created_at', 'desc')->get();
+        $archivos = $expediente->archivos()->orderBy('created_at', 'desc')->get();
         return pdf()
-            ->view('pdf.expediente', compact('expediente'))
+            ->view('pdf.expediente.expediente', compact('expediente', 'responsable', 'comentarios', 'archivos'))
+            ->headerView('pdf.expediente.header')
+            ->footerView('pdf.expediente.footer')
+            ->format(Format::A4)
             ->name('Expediente N°' . $expediente->n_mesa_entrada . '.pdf');
     }
 
