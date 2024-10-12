@@ -11,6 +11,7 @@ use function Spatie\LaravelPdf\Support\pdf;
 
 class ExpedienteController extends Controller
 {
+    // Funcion para descargar archivos del expediente
     public function download($record)
     {
         $archivo = Archivo::findOrFail($record);
@@ -27,9 +28,10 @@ class ExpedienteController extends Controller
         $responsable = $expediente->ciudadano()->first();
         $comentarios = $expediente->comentarios()->orderBy('created_at', 'desc')->get();
         $archivos = $expediente->archivos()->orderBy('created_at', 'desc')->get();
+        $logo = asset('img/Logo-Escudo-de-Nemby.png');
         return pdf()
             ->view('pdf.expediente.expediente', compact('expediente', 'responsable', 'comentarios', 'archivos'))
-            ->headerView('pdf.expediente.header')
+            ->headerView('pdf.expediente.header', compact('logo'))
             ->footerView('pdf.expediente.footer')
             ->format(Format::A4)
             ->name('Expediente N°' . $expediente->n_mesa_entrada . '.pdf');

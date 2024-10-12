@@ -1,8 +1,4 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title></title>
+
     <style>
         body {
             margin: 0;
@@ -57,16 +53,15 @@
             font-size: 12px;
             margin: 0;
         }
-        .shield img {
+        .shield img {            
             height: 60px;
         }
     </style>
-</head>
-<body>
+
     <header class="header">
         <div class="container">
             <div class="logo">
-                <img src="http://nemby.gov.py/wp-content/uploads/2023/03/Logo-Escudo-de-Nemby.png">
+                <img src="{{asset('img/Logo-Escudo-de-Nemby.png')}}">                
             </div>
             <div class="contact-info">
                 <h2><b>MUNICIPALIDAD DE ÑEMBY</b></h2>
@@ -78,5 +73,3 @@
             </div>
         </div>
     </header>
-</body>
-</html>

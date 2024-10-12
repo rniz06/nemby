@@ -11,20 +11,6 @@
 <body>
 
     <div class="p-4 mx-auto">
-        {{-- {/* Header */}
-        <header class="flex justify-between items-center mb-2 pb-2 border-b text-wrap">
-            <img src="http://nemby.gov.py/wp-content/uploads/2023/03/Logo-Escudo-de-Nemby.png"
-                alt="Escudo Municipalidad de Ñemby" class="h-16" />
-
-            <img src="http://nemby.gov.py/wp-content/uploads/2023/03/Logo-Administracion-Tomas-Olmedo.png"
-                alt="Logo Municipalidad de Ñemby" class="h-16" />
-            <div class="text-start ">
-                <h2 class="text-sm">Generado el: <br>10/10/2024 17:24 Hs</h2>
-                <p class="text-sm">Usuario: <br>Ronald Niz</p>                
-            </div>
-
-        </header> --}}
-        {{-- @include('pdf.expediente.header') --}}
         {{-- {/* Título */} --}}
         <h1 class="text-2xl font-bold text-center my-4">Datos</h1>
 

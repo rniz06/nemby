@@ -100,8 +100,29 @@ class ViewExpediente extends ViewRecord
                         ->required(),
                 ])
                 ->action(function (array $data, Expediente $record): void {
+                    // Obtener el usuario autenticado
+                    $usuario = Auth::user();
+                    // Obtener el valor antiguo
+                    $departamento_id_old = $record->departamento->departamento;
+                    // Insertar los nuevos valores
                     $record->departamento_id = $data['departamento_id'];
+                    // Guardar los cambios
                     $record->save();
+
+                    // Recarga las relaciones para obtener los valores actualizados
+                    $record->load('departamento');
+
+                    // Crear una nueva instancia del modelo Comentario
+                    $comentario = new Comentario();
+                    // Genera un comentario automatico en caso que deriven el expediente a otra direccion
+                    $comentario_generado = "$usuario->name derivo el expediente de $departamento_id_old a {$record->departamento->departamento}";
+                    // Insertar los nuevos valores
+                    $comentario->comentario = $comentario_generado;
+                    $comentario->expediente_id = $record->id;
+                    $comentario->usuario_id = $usuario->id;
+                    $comentario->created_at = now();
+                    $comentario->updated_at = now();
+                    $comentario->save();
                 }),
 
         ];
@@ -137,10 +158,10 @@ class ViewExpediente extends ViewRecord
                                 RepeatableEntry::make('archivos')
                                     ->schema([
                                         TextEntry::make('nombre_original')->label('')
-                                        
-                                        ->url(fn ($record) => route('expediente.descargar.archivo', $record->id))
-                                        ->badge()
-                                        ->openUrlInNewTab()                                        
+
+                                            ->url(fn($record) => route('expediente.descargar.archivo', $record->id))
+                                            ->badge()
+                                            ->openUrlInNewTab()
                                     ])->contained(false),
                             ])->columnSpan(1)
                     ])->columnSpanFull()
