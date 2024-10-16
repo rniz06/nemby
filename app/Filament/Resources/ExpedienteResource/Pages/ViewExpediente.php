@@ -2,7 +2,9 @@
 
 namespace App\Filament\Resources\ExpedienteResource\Pages;
 
+use Filament\Infolists\Components\Livewire;
 use App\Filament\Resources\ExpedienteResource;
+use App\Livewire\Comentario as LivewireComentario;
 use App\Models\Departamento;
 use App\Models\Expediente\Archivo;
 use App\Models\Expediente\Comentario;
@@ -20,7 +22,6 @@ use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\FileUpload;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
-use Filament\Infolists\Components\Actions\Action as ActionInfolist;
 
 class ViewExpediente extends ViewRecord
 {
@@ -134,12 +135,7 @@ class ViewExpediente extends ViewRecord
             ->schema([
                 Grid::make(3)
                     ->schema([
-                        RepeatableEntry::make('comentarios')
-                            ->schema([
-                                TextEntry::make('usuario.name')->label(''),
-                                TextEntry::make('created_at')->label('')->dateTime(),
-                                TextEntry::make('comentario')->label('')->columnSpan(2),
-                            ])->columnSpan(2),
+                        Livewire::make(LivewireComentario::class)->columnSpan(2),
 
                         Section::make('Detalles del Expediente:')
                             ->icon('heroicon-o-folder')
@@ -158,7 +154,6 @@ class ViewExpediente extends ViewRecord
                                 RepeatableEntry::make('archivos')
                                     ->schema([
                                         TextEntry::make('nombre_original')->label('')
-
                                             ->url(fn($record) => route('expediente.descargar.archivo', $record->id))
                                             ->badge()
                                             ->openUrlInNewTab()
