@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Expediente\Expediente;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -24,5 +25,12 @@ class Ciudadano extends Model
     public function ciudad()
     {
         return $this->belongsTo(Ciudad::class, 'ciudad_id');
+    }
+
+    // Relacion uno a muchos inversa con la tabla de expedientes
+    // Un ciudadano puede tener varios expedientes
+    public function expedientes()
+    {
+        return $this->hasMany(Expediente::class);
     }
 }
