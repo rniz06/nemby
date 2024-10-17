@@ -32,6 +32,13 @@ class ViewExpediente extends ViewRecord
         return [
             // Actions\EditAction::make(),
 
+            // Logica que crea un boton Generar un reporte
+            Action::make('pdf')
+                ->color('gray')
+                ->icon('forkawesome-file-pdf-o')
+                ->url(fn(Expediente $record): string => route('expediente.generar.pdf', $record))
+                ->openUrlInNewTab(),
+
             // Logica que crea un boton para abri un modal y realizar un comentario
             Action::make('Subir Archivo')
                 ->color('gray')
