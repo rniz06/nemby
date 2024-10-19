@@ -25,6 +25,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'departamento_id',
     ];
 
     /**
@@ -50,23 +51,46 @@ class User extends Authenticatable
         ];
     }
 
-    // Relacion uno a muchos inversa con la tabla de expediente campo agregado_por
+    /**
+     * Obtiene los expedientes asociados al usuario.
+     *
+     * Este método define una relación de uno a muchos donde un usuario puede tener múltiples expedientes.
+     */
     public function expedientes()
     {
         return $this->hasMany(Expediente::class);
     }
 
-    // Relacion uno a muchos inversa con la tabla de expediente_comentarios
-    // Un usuario puede realizar varios comentarios en un expediente o mas
+    /**
+     * Obtiene los comentarios asociados a los expedientes del usuario.
+     *
+     * Este método define una relación de uno a muchos donde un usuario puede realizar múltiples comentarios
+     * en uno o más expedientes.
+     */
     public function comentarios()
     {
         return $this->hasMany(Comentario::class);
     }
 
-    // Relacion uno a muchos inversa con la tabla de expediente_archivos
-    // Un usuario puede tener agregar varios archivos
+    /**
+     * Obtiene los archivos asociados a los expedientes del usuario.
+     *
+     * Este método define una relación de uno a muchos donde un usuario puede adjuntar múltiples archivos
+     * a sus expedientes.
+     */
     public function archivos()
     {
         return $this->hasMany(Archivo::class);
+    }
+
+    /**
+     * Obtiene el departamento al que pertenece el usuario.
+     *
+     * Este método define una relación de muchos a uno donde un usuario pertenece a un único departamento
+     * indicado por el campo 'departamento_id'.
+     */
+    public function departamento()
+    {
+        return $this->belongsTo(Departamento::class, 'departamento_id');
     }
 }

@@ -14,10 +14,23 @@ class Departamento extends Model
 
     protected $fillable = ['departamento'];
 
-    // Relacion uno a muchos inversa con la tabla de expedientes
-    // Un departamento puede tener varios expedientes
+    /**
+     * Relación uno a muchos inversa con la tabla de expedientes.
+     *
+     * Un departamento puede tener varios expedientes asociados.
+     */
     public function expedientes()
     {
         return $this->hasMany(Expediente::class);
+    }
+
+    /**
+     * Relación uno a muchos con la tabla de usuarios.
+     *
+     * Un departamento puede tener varios usuarios asociados.
+     */
+    public function usuarios()
+    {
+        return $this->hasMany(User::class);
     }
 }

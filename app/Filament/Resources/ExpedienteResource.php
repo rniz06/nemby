@@ -168,6 +168,19 @@ class ExpedienteResource extends Resource
             ]);
     }
 
+    public static function getEloquentQuery(): Builder
+    {
+        $query = parent::getEloquentQuery();
+        
+        $user = auth()->user();
+        
+        if (!$user->hasRole('super_admin')) {
+            $query->where('departamento_id', $user->departamento_id);
+        }
+        
+        return $query;
+    }
+
     public static function getRelations(): array
     {
         return [

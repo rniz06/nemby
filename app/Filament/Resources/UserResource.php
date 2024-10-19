@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\UserResource\Pages;
 use App\Filament\Resources\UserResource\RelationManagers;
+use App\Models\Departamento;
 use App\Models\User;
 use Filament\Forms;
 use Filament\Forms\Components\Section;
@@ -30,26 +31,32 @@ class UserResource extends Resource
             ->schema([
                 Section::make()->schema([
                     Forms\Components\TextInput::make('name')
-                    ->label('Nombre:')
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('email')
-                    ->label('Correo:')
-                    ->email()
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\Select::make('roles')
-                    ->relationship('roles', 'name')
-                    ->label('Roles:')
-                    ->multiple()
-                    ->preload()
-                    ->searchable(),
-                Forms\Components\TextInput::make('password')
-                    ->label('Contraseña:')
-                    ->password()
-                    ->required()
-                    ->maxLength(255)
-                    ->revealable(),
+                        ->label('Nombre:')
+                        ->required()
+                        ->maxLength(255),
+                    Forms\Components\TextInput::make('email')
+                        ->label('Correo:')
+                        ->email()
+                        ->required()
+                        ->maxLength(255),
+                    Forms\Components\Select::make('roles')
+                        ->relationship('roles', 'name')
+                        ->label('Roles:')
+                        ->multiple()
+                        ->preload()
+                        ->searchable(),
+                    Forms\Components\TextInput::make('password')
+                    ->hiddenOn('edit')
+                        ->label('Contraseña:')
+                        ->password()
+                        ->required()
+                        ->maxLength(255)
+                        ->revealable(),
+                    Forms\Components\Select::make('departamento_id')
+                        ->label('Departamento')
+                        ->options(Departamento::all()->pluck('departamento', 'id'))
+                        ->searchable()
+                        ->preload()
                 ])->columns(2)
             ]);
     }
@@ -63,6 +70,12 @@ class UserResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('email')
                     ->label('Email:')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('roles.name')
+                    ->label('Roles:')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('departamento.departamento')
+                    ->label('Departamento:')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->label('Creado el:')
