@@ -9,6 +9,7 @@ use App\Models\Departamento;
 use App\Models\Expediente\Archivo;
 use App\Models\Expediente\Comentario;
 use App\Models\Expediente\Expediente;
+use App\Models\Expediente\Movimiento;
 use Filament\Resources\Pages\ViewRecord;
 use Filament\Infolists\Infolist;
 use Filament\Infolists\Components\Grid;
@@ -106,6 +107,9 @@ class ViewExpediente extends ViewRecord
                         ->label('Seleccionar Dirección')
                         ->options(Departamento::query()->pluck('departamento', 'id'))
                         ->required(),
+                    Textarea::make('comentario_envio')
+                    ->label('Motivo')
+                    ->required(),
                 ])
                 ->action(function (array $data, Expediente $record): void {
                     // Obtener el usuario autenticado
@@ -119,6 +123,17 @@ class ViewExpediente extends ViewRecord
 
                     // Recarga las relaciones para obtener los valores actualizados
                     $record->load('departamento');
+
+                    //
+                    $moviemiento = new Movimiento();
+
+                    $moviemiento->expediente_id = $record->id;
+                    $moviemiento->departamento_origen_id = $record->departamento_id;
+                    $moviemiento->departamento_destino_id = $data['departamento_id'];
+                    $moviemiento->estado = "PENDIENTE";
+                    $moviemiento->comentario_envio = $data['comentario_envio'];
+                    $moviemiento->usuario_id = $usuario->id;
+                    $moviemiento->save();
 
                     // Crear una nueva instancia del modelo Comentario
                     $comentario = new Comentario();

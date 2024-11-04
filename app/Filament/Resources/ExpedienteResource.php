@@ -165,7 +165,8 @@ class ExpedienteResource extends Resource
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
-            ]);
+            ])
+            ->paginated([5, 10, 15, 20, 25]);
     }
 
     public static function getEloquentQuery(): Builder
